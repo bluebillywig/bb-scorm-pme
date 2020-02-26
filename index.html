@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project Management Essentials</title>
+    <script src="assets/SCORM_API_wrapper.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<script type="text/javascript">
+
+    var sco = pipwerks.SCORM;
+    var success = sco.init();
+
+    function bbtl_checkcompletion() {
+        var completion = localStorage.getItem('bbtl_setcompletion');
+        if (completion != null && completion === 'true') {
+            localStorage.removeItem('bbtl_setcompletion');
+
+            if (success) {
+                var status = sco.get("cmi.core.lesson_status");
+                if (status !== "completed") {
+                    success = sco.set("cmi.core.lesson_status", "completed");
+                    if (success) {
+                        sco.quit();
+                    }
+                }
+            }
+        }
+        else {
+            window.setTimeout('bbtl_checkcompletion();', 100);
+        }
+    }
+
+    bbtl_checkcompletion();
+</script>
+<script type="text/javascript" src="//[[PUBLICATION]].bbvms.com/p/[[PLAYOUT]]/c/[[CLIPID]].js?callback=bb_callback"
+        async="true"></script>
+</body>
+</html>
